@@ -28,7 +28,6 @@ public class UserRestController {
 	UserRepository userRepository;
 	
 
-	
 	@RequestMapping(value = "/users", method = RequestMethod.GET,produces="application/json") 	
     public @ResponseBody  String  getAllUsers() throws JsonProcessingException
     {
@@ -52,6 +51,16 @@ public class UserRestController {
        ObjectMapper mapper = new ObjectMapper();
        return  mapper.writeValueAsString(tutor);     
       
+    }
+	
+	@RequestMapping(value = "/login/{username}/{password}", method = RequestMethod.GET,produces="application/json") 	
+    public @ResponseBody  String  login(@PathVariable("username") String username,@PathVariable("password") String password) throws JsonProcessingException
+    {
+	   LOGGER.info("loginning as ..."+"------"+username);
+       Boolean isLogin = userRepository.Login(username, password);   
+       ObjectMapper mapper = new ObjectMapper();
+       return  mapper.writeValueAsString(isLogin);     
+     
     }
 	
 }

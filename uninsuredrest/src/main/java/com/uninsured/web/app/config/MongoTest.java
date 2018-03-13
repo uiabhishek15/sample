@@ -7,6 +7,7 @@ import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
+import com.uninsured.data.entity.Admin;
 import com.uninsured.data.entity.User;
 
 public class MongoTest {
@@ -26,26 +27,17 @@ public class MongoTest {
 
 	        return generatedToken.toString();
 	    }*/
-
+	
 public static void main(String[] args) throws Exception {
 		
 		MongoOperations mongoOperations = MongoDBContextOperations.getMongoOperations();
-		Query query = new Query();
-		query.addCriteria(Criteria.where("County").regex("a$", "i"));
-		List<User> users = mongoOperations.find(query,User.class);
-				System.out.println(users);
-				for (User tutor : users) {
-					System.out.println(tutor.getCounty());
-				}
-				
-				String as = "Erie";
-				Query query1 = new Query();
-				query1.addCriteria(Criteria.where("County").regex("^"+as, "i"));
-				List<User> users1 = mongoOperations.find(query1,User.class);
-						System.out.println(users1);
-						for (User tutor : users1) {
-							System.out.println(tutor.getCounty());
-						}
+		Admin am;
+		am=new Admin();
+		am.setUsername("countyadmin");
+		am.setPassword("cadmin1234");
+		System.out.println(am.getUsername()+""+am.getPassword());
+		mongoOperations.save(am);
+		System.out.println(mongoOperations.findAll(Admin.class));
 		/*Query query = new Query();
 		query.addCriteria(Criteria.where("email").is("a@gmail.com"));
 

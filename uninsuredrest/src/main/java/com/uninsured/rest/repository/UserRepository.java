@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
+import com.uninsured.data.entity.Admin;
 import com.uninsured.data.entity.User;
 import com.uninsured.web.app.config.MongoDBContextOperations;
 
@@ -32,5 +33,21 @@ public class UserRepository {
 		List<User> searchcounty = mongoOperations.find(query, User.class);
 		return searchcounty;
 	}
-	
+
+	public Boolean Login(String username, String password) {
+
+		Criteria criteria = new Criteria();
+		criteria.andOperator(Criteria.where("username").is(username),Criteria.where("password").is(password));
+        Query query = new Query(criteria);
+        Admin admin = mongoOperations.findOne(query, Admin.class);
+        String dbPassword = admin.getPassword();
+        if(mongoOperations.findOne(query, Admin.class) != null) {
+			return true;
+		}
+        else
+        {
+        	return false;
+        }
+
+	}
 }
