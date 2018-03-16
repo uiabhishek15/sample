@@ -22,6 +22,27 @@
 
 <h:body>
 	<h:form> 
+	   <h:outputLink value="javascript:void(0)" onclick="PF('dlg').show();" title="login as admin">
+        <p:graphicImage name="images/login.jpg" library="default" style="width:10%;height:10%;"/>
+    </h:outputLink>
+ 
+ 
+    <p:growl id="growl" sticky="true" showDetail="true" life="3000" />
+ 
+    <p:dialog header="Login as Admin" widgetVar="dlg" resizable="false">
+        <h:panelGrid columns="2" cellpadding="5">
+            <h:outputLabel for="username" value="Username:" />
+            <p:inputText id="username" value="#{loginbean.username}" required="true" label="username" />
+ 
+            <h:outputLabel for="password" value="Password:" />
+            <p:password id="password" value="#{loginbean.password}" required="true" label="password" />
+ 
+            <f:facet name="footer">
+                <p:commandButton value="Login" update="growl" actionListener="#{loginbean.login}"
+                                 oncomplete="handleLoginRequest(xhr, status, args)" />
+            </f:facet>  
+        </h:panelGrid>
+    </p:dialog>
 	<div class="ui-fluid">
      <p:dataTable var="user" value="#{json.users}" reflow="true" style="margin-top:20px" rows="10" scrollable="true" scrollWidth="100%"
                          paginator="true" widgetVar="carsTable" filteredValue="#{json.filterusers}"
@@ -735,11 +756,24 @@
     </div>
 
 	<!-- Heat map for the Uninsured and Population per county -->
-    <hf:heatmap type="heatmap" value="#{json.users}" var="user" showDataLabel="true"
+    <hf:heatmap type="heatmap" value="#{json.users}" var="user" showDataLabel="true" style="margin-top:140px;"
      point="#{user.population}" xvalue="#{user.county}" yvalue="#{user.uninsured}" min="0" xaxisLabel="County" height="100%"
      title="Uninsured Population Vs Population per county" minColor="#FFF" maxColor="#FF6600" borderWidth="2" width="100%" />
-   
+  
+   <script type="text/javascript">
+    function handleLoginRequest(xhr, status, args) {
+        if(args.validationFailed || !args.loggedIn) {
+            PF('dlg').jq.effect("shake", {times:5}, 100);
+        }
+        else {
+            PF('dlg').hide();
+            $('#loginLink').fadeOut();
+        }
+    }
+</script>
 </h:form>
+ 
+
 </h:body>
 
 </html>
